@@ -1,0 +1,343 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 头部样式 */
+header {
+    background-color: #4a6572;
+    color: #fff;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    float: left;
+}
+
+nav {
+    float: right;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 1.5rem;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    color: #f9aa33;
+}
+
+/* 清除浮动 */
+header::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* 主要内容区域 */
+main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 130px);
+}
+
+.section {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+    color: #4a6572;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #f9aa33;
+    padding-bottom: 0.5rem;
+}
+
+.section h3 {
+    color: #4a6572;
+    margin: 1.5rem 0 1rem;
+}
+
+/* 特性展示 */
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    justify-content: space-between;
+}
+
+.feature {
+    flex: 0 0 48%;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+}
+
+.feature h3 {
+    color: #f9aa33;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #4a6572;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group button {
+    background-color: #4a6572;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 1rem;
+    transition: background-color 0.3s;
+}
+
+.form-group button:hover {
+    background-color: #344955;
+}
+
+.form-group button[type="button"] {
+    background-color: #ccc;
+}
+
+.form-group button[type="button"]:hover {
+    background-color: #bbb;
+}
+
+/* 列表容器 */
+.list-container {
+    margin-top: 1rem;
+}
+
+.list-item {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.list-item:hover {
+    transform: translateY(-3px);
+    background-color: #f0f0f0;
+}
+
+.list-item h3 {
+    margin-top: 0;
+    color: #4a6572;
+}
+
+.list-item p {
+    margin: 0.5rem 0;
+}
+
+/* 操作栏 */
+.action-bar {
+    margin: 1.5rem 0;
+}
+
+.action-bar button {
+    background-color: #f9aa33;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 1rem;
+    transition: background-color 0.3s;
+}
+
+.action-bar button:hover {
+    background-color: #e09429;
+}
+
+/* 家族关系图容器 */
+.tree-container {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    min-height: 400px;
+    overflow: auto;
+}
+
+/* 树节点样式 */
+.tree-node {
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 150px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tree-node.male {
+    background-color: #e6f7ff;
+    border-color: #91d5ff;
+}
+
+.tree-node.female {
+    background-color: #fff0f6;
+    border-color: #ffadd2;
+}
+
+.tree-node h4 {
+    margin: 0;
+    color: #4a6572;
+}
+
+.tree-node p {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.tree-connector {
+    border-left: 2px solid #ddd;
+    height: 20px;
+    margin-left: 50%;
+}
+
+/* 页脚样式 */
+footer {
+    background-color: #4a6572;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    header h1 {
+        float: none;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    nav {
+        float: none;
+    }
+    
+    nav ul {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    nav ul li {
+        margin: 0 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .feature {
+        flex: 0 0 100%;
+    }
+}
+
+/* 工具类 */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+/*新的父子关系图*/
+.node-style {
+    fill: #fff;
+    stroke: #1f77b4;
+    stroke-width: 2px;
+}
+
+.edge-style {
+    stroke: #999;
+    stroke-width: 2px;
+    fill: none;
+}
+
+.node-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}

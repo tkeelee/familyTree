@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家谱应用</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>家谱应用</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" id="nav-home">首页</a></li>
+                    <li><a href="#" id="nav-trees">家谱大厅</a></li>
+                    <li><a href="#" id="nav-families">家族大厅</a></li>
+                    <li><a href="#" id="nav-login">登录</a></li>
+                    <li><a href="#" id="nav-register">注册</a></li>
+                    <li><a href="#" id="nav-user" style="display: none;">个人中心</a></li>
+                    <li><a href="#" id="nav-logout" style="display: none;">退出</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- 首页内容 -->
+            <section id="home-section" class="section">
+                <h2>欢迎使用家谱应用</h2>
+                <p>这是一个帮助您记录和管理家族历史的应用程序。您可以创建家谱、添加家族成员、记录家族历史，并以树状图的形式查看您的家族关系。</p>
+                <div class="features">
+                    <div class="feature">
+                        <h3>创建家谱</h3>
+                        <p>创建您的家谱，记录家族的历史和传承。</p>
+                    </div>
+                    <div class="feature">
+                        <h3>管理家族</h3>
+                        <p>在家谱中添加多个家族，组织您的家族结构。</p>
+                    </div>
+                    <div class="feature">
+                        <h3>添加成员</h3>
+                        <p>添加家族成员，记录他们的生平和故事。</p>
+                    </div>
+                    <div class="feature">
+                        <h3>家族关系图</h3>
+                        <p>以树状图的形式查看家族成员之间的关系。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 登录表单 -->
+            <section id="login-section" class="section" style="display: none;">
+                <h2>用户登录</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">用户名</label>
+                        <input type="text" id="login-username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">密码</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">登录</button>
+                    </div>
+                    <p>还没有账号？<a href="#" id="to-register">立即注册</a></p>
+                </form>
+            </section>
+
+            <!-- 注册表单 -->
+            <section id="register-section" class="section" style="display: none;">
+                <h2>用户注册</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-username">用户名</label>
+                        <input type="text" id="register-username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">密码</label>
+                        <input type="password" id="register-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">确认密码</label>
+                        <input type="password" id="register-confirm-password" name="confirmPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">注册</button>
+                    </div>
+                    <p>已有账号？<a href="#" id="to-login">立即登录</a></p>
+                </form>
+            </section>
+
+            <!-- 家谱大厅 -->
+            <section id="trees-section" class="section" style="display: none;">
+                <h2>家谱大厅</h2>
+                <div class="action-bar">
+                    <button id="create-tree-btn">创建家谱</button>
+                </div>
+                <div id="trees-list" class="list-container">
+                    <!-- 家谱列表将通过JavaScript动态加载 -->
+                </div>
+            </section>
+
+            <!-- 家族大厅 -->
+            <section id="families-section" class="section" style="display: none;">
+                <h2>家族大厅</h2>
+                <div class="action-bar">
+                    <button id="create-family-btn">创建家族</button>
+                </div>
+                <div id="families-list" class="list-container">
+                    <!-- 家族列表将通过JavaScript动态加载 -->
+                </div>
+            </section>
+
+            <!-- 家谱详情 -->
+            <section id="tree-detail-section" class="section" style="display: none;">
+                <h2 id="tree-detail-title">家谱详情</h2>
+                <div id="tree-detail-info"></div>
+                <div class="action-bar">
+                    <button id="add-family-to-tree-btn">添加家族</button>
+                    <button id="back-to-trees-btn">返回家谱大厅</button>
+                </div>
+                <h3>家族列表</h3>
+                <div id="tree-families-list" class="list-container">
+                    <!-- 家谱下的家族列表将通过JavaScript动态加载 -->
+                </div>
+            </section>
+
+            <!-- 家族详情 -->
+            <section id="family-detail-section" class="section" style="display: none;">
+                <h2 id="family-detail-title">家族详情</h2>
+                <div id="family-detail-info"></div>
+                <div class="action-bar">
+                    <button id="add-person-btn">添加成员</button>
+                    <button id="view-family-tree-btn">查看家族关系图</button>
+                    <button id="back-to-families-btn">返回家族大厅</button>
+                </div>
+                <h3>成员列表</h3>
+                <div id="family-persons-list" class="list-container">
+                    <!-- 家族成员列表将通过JavaScript动态加载 -->
+                </div>
+            </section>
+
+            <!-- 家族关系图 -->
+            <section id="family-tree-view-section" class="section" style="display: none;">
+                <h2 id="family-tree-view-title">家族关系图</h2>
+                <div class="action-bar">
+                    <button id="back-to-family-detail-btn">返回家族详情</button>
+                </div>
+                <div id="family-tree-container" class="tree-container">
+                    <!-- 家族关系图将通过JavaScript动态生成 -->
+                </div>
+            </section>
+
+            <!-- 个人中心 -->
+            <section id="user-section" class="section" style="display: none;">
+                <h2>个人中心</h2>
+                <div id="user-info"></div>
+                <h3>我创建的家谱</h3>
+                <div id="user-trees-list" class="list-container">
+                    <!-- 用户创建的家谱列表将通过JavaScript动态加载 -->
+                </div>
+                <h3>我创建的家族</h3>
+                <div id="user-families-list" class="list-container">
+                    <!-- 用户创建的家族列表将通过JavaScript动态加载 -->
+                </div>
+            </section>
+
+            <!-- 创建家谱表单 -->
+            <section id="create-tree-section" class="section" style="display: none;">
+                <h2>创建家谱</h2>
+                <form id="create-tree-form">
+                    <div class="form-group">
+                        <label for="tree-name">家谱名称</label>
+                        <input type="text" id="tree-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tree-description">家谱介绍</label>
+                        <textarea id="tree-description" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">创建</button>
+                        <button type="button" id="cancel-create-tree">取消</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 创建家族表单 -->
+            <section id="create-family-section" class="section" style="display: none;">
+                <h2>创建家族</h2>
+                <form id="create-family-form">
+                    <div class="form-group">
+                        <label for="family-name">家族名称</label>
+                        <input type="text" id="family-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="family-tree-id">所属家谱</label>
+                        <select id="family-tree-id" name="treeId" required>
+                            <!-- 家谱选项将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="family-description">家族介绍</label>
+                        <textarea id="family-description" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">创建</button>
+                        <button type="button" id="cancel-create-family">取消</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 添加成员表单 -->
+            <section id="add-person-section" class="section" style="display: none;">
+                <h2>添加成员</h2>
+                <form id="add-person-form">
+                    <div class="form-group">
+                        <label for="person-name">姓名</label>
+                        <input type="text" id="person-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="person-gender">性别</label>
+                        <select id="person-gender" name="gender" required>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="person-generation">辈分</label>
+                        <input type="text" id="person-generation" name="generation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="person-parent-id">父节点</label>
+                        <select id="person-parent-id" name="parentId">
+                            <option value="">无（作为根节点）</option>
+                            <!-- 父节点选项将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="person-birth-date">出生日期</label>
+                        <input type="text" id="person-birth-date" name="birthDate" placeholder="例如：1980-01-01">
+                    </div>
+                    <div class="form-group">
+                        <label for="person-birth-place">出生地</label>
+                        <input type="text" id="person-birth-place" name="birthPlace">
+                    </div>
+                    <div class="form-group">
+                        <label for="person-death-date">死亡日期</label>
+                        <input type="text" id="person-death-date" name="deathDate" placeholder="例如：2020-01-01">
+                    </div>
+                    <div class="form-group">
+                        <label for="person-description">简介</label>
+                        <textarea id="person-description" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>添加配偶</label>
+                        <input type="checkbox" id="add-spouse-checkbox">
+                    </div>
+                    <div id="spouse-info" style="display: none;">
+                        <div class="form-group">
+                            <label for="spouse-name">配偶姓名</label>
+                            <input type="text" id="spouse-name" name="spouseName">
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse-birth-date">配偶出生日期</label>
+                            <input type="text" id="spouse-birth-date" name="spouseBirthDate" placeholder="例如：1980-01-01">
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse-birth-place">配偶出生地</label>
+                            <input type="text" id="spouse-birth-place" name="spouseBirthPlace">
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse-death-date">配偶死亡日期</label>
+                            <input type="text" id="spouse-death-date" name="spouseDeathDate" placeholder="例如：2020-01-01">
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse-description">配偶简介</label>
+                            <textarea id="spouse-description" name="spouseDescription" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">添加</button>
+                        <button type="button" id="cancel-add-person">取消</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 家谱应用 - 保留所有权利</p>
+        </div>
+    </footer>
+
+    <!-- 添加新的JS文件引用 -->
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/tree.js"></script>
+    <script src="js/family.js"></script>
+    <script src="js/person.js"></script>
+    <script src="js/treeView.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.4/dagre-d3.min.js"></script>
+</body>
+</html>
