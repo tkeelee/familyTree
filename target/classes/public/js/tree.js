@@ -6,11 +6,18 @@
  * 加载家谱列表
  */
 function loadFamilyTrees() {
+    // 加载所有家谱
     fetch('/api/trees')
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            renderFamilyTrees(data.data);
+            // 分离我的家谱和所有家谱
+            const allTrees = data.data;
+            const myTrees = allTrees.filter(tree => tree.creatorId === currentUser.id);
+            
+            // 渲染我的家谱和所有家谱
+            renderMyFamilyTrees(myTrees);
+            renderAllFamilyTrees(allTrees);
         }
     })
     .catch(error => {
@@ -20,14 +27,41 @@ function loadFamilyTrees() {
 }
 
 /**
- * 渲染家谱列表
+ * 渲染我的家谱列表
  * @param {Array} trees 家谱列表
  */
-function renderFamilyTrees(trees) {
-    const treesList = document.getElementById('trees-list');
+function renderMyFamilyTrees(trees) {
+    const myTreesList = document.getElementById('my-trees-list');
     
     if (trees.length === 0) {
-        treesList.innerHTML = '<p>暂无家谱</p>';
+        myTreesList.innerHTML = '<p>暂无家谱</p>';
+        return;
+    }
+    
+    let html = '';
+    trees.forEach(tree => {
+        html += `
+            <div class="list-item" data-id="${tree.id}" onclick="viewTreeDetail('${tree.id}')">
+                <h3>${tree.name}</h3>
+                <p>创建者: 我</p>
+                <p>创建时间: ${tree.createdAt}</p>
+                <p>${tree.description || '暂无介绍'}</p>
+            </div>
+        `;
+    });
+    
+    myTreesList.innerHTML = html;
+}
+
+/**
+ * 渲染所有家谱列表
+ * @param {Array} trees 家谱列表
+ */
+function renderAllFamilyTrees(trees) {
+    const allTreesList = document.getElementById('all-trees-list');
+    
+    if (trees.length === 0) {
+        allTreesList.innerHTML = '<p>暂无家谱</p>';
         return;
     }
     
@@ -43,7 +77,7 @@ function renderFamilyTrees(trees) {
         `;
     });
     
-    treesList.innerHTML = html;
+    allTreesList.innerHTML = html;
 }
 
 /**

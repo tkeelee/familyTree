@@ -25,7 +25,7 @@ public class SpouseService {
      * @return 添加的配偶对象
      */
     public Spouse addSpouse(String name, String birthDate, String birthPlace, String deathDate, String description) {
-        Spouse spouse = new Spouse(name, birthDate, birthPlace, deathDate, description);
+        Spouse spouse = new Spouse("",name, birthDate, birthPlace, deathDate, description);
         if (spouseDao.save(spouse)) {
             return spouse;
         }

@@ -21,6 +21,7 @@ public class PersonService {
     
     /**
      * 添加人员
+     * @param id 人员ID
      * @param name 姓名
      * @param gender 性别
      * @param generation 辈分
@@ -33,13 +34,44 @@ public class PersonService {
      * @param familyId 家族ID
      * @return 添加的人员对象
      */
-    public Person addPerson(String name, String gender, String generation, String birthDate, 
+    public Person addPerson(String id,String name, String gender, String generation, String birthDate, 
                            String birthPlace, String deathDate, String description, 
-                           String parentId, String treeId, String familyId) {
-        Person person = new Person(name, gender, generation, birthDate, birthPlace, deathDate, 
-                                  description, parentId, treeId, familyId);
-        if (personDao.save(person)) {
+                           String parentId, String treeId, String familyId,String spouseId) {
+
+        Person person = new Person(id,name, gender, generation, birthDate, birthPlace, deathDate, 
+                                  description, parentId, treeId, familyId,spouseId);
+        if(id.length()>0){
+            if (personDao.update(person)) {
+                return person;
+            }
+        }
+        else if (personDao.save(person)) {
             return person;
+        }
+        return null;
+    }
+
+    /*
+     * 添加配偶
+     * @param id 配偶ID
+     * @param spouseName 配偶姓名
+     * @param spouseBirthDate 配偶出生日期
+     * @param spouseBirthPlace 配偶出生地
+     * @param spouseDeathDate 配偶死亡日期
+     * @param spouseDescription 配偶简介
+     * @return 添加的配偶对象
+    */
+    public Spouse addSpouse(String id, String spouseName, String spouseBirthDate, 
+              String spouseBirthPlace, String spouseDeathDate, String spouseDescription) {
+        // 创建配偶
+        Spouse spouse = new Spouse(id,spouseName, spouseBirthDate, spouseBirthPlace, spouseDeathDate, spouseDescription);
+        if(id.length()>0){
+            if (spouseDao.update(spouse)) {
+                return spouse;
+            }
+        }
+        else if (spouseDao.save(spouse)) {
+            return spouse;
         }
         return null;
     }
@@ -57,7 +89,7 @@ public class PersonService {
     public Person addPersonWithSpouse(Person person, String spouseName, String spouseBirthDate, 
                                      String spouseBirthPlace, String spouseDeathDate, String spouseDescription) {
         // 创建配偶
-        Spouse spouse = new Spouse(spouseName, spouseBirthDate, spouseBirthPlace, spouseDeathDate, spouseDescription);
+        Spouse spouse = new Spouse("",spouseName, spouseBirthDate, spouseBirthPlace, spouseDeathDate, spouseDescription);
         if (spouseDao.save(spouse)) {
             // 设置人员的配偶ID
             person.setSpouseId(spouse.getId());

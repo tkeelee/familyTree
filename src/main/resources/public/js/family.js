@@ -10,7 +10,13 @@ function loadFamilies() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            renderFamilies(data.data);
+            // 分离我的家族和所有家族
+            const allFamilies = data.data;
+            const myFamilies = allFamilies.filter(tree => tree.creatorId === currentUser.id);
+            
+            // 渲染我的家谱和所有家谱
+            renderMyFamilies(myFamilies);
+            renderAllFamilies(allFamilies);
         }
     })
     .catch(error => {
@@ -20,14 +26,14 @@ function loadFamilies() {
 }
 
 /**
- * 渲染家族列表
+ * 渲染我的家族列表
  * @param {Array} families 家族列表
  */
-function renderFamilies(families) {
-    const familiesList = document.getElementById('families-list');
+function renderMyFamilies(families) {
+    const myFamiliesList = document.getElementById('my-families-list');
     
     if (families.length === 0) {
-        familiesList.innerHTML = '<p>暂无家族</p>';
+        myFamiliesList.innerHTML = '<p>暂无家族</p>';
         return;
     }
     
@@ -43,7 +49,34 @@ function renderFamilies(families) {
         `;
     });
     
-    familiesList.innerHTML = html;
+    myFamiliesList.innerHTML = html;
+}
+
+/**
+ * 渲染全部家族列表
+ * @param {Array} families 家族列表
+ */
+function renderAllFamilies(families) {
+    const allFamiliesList = document.getElementById('all-families-list');
+    
+    if (families.length === 0) {
+        allFamiliesList.innerHTML = '<p>暂无家族</p>';
+        return;
+    }
+    
+    let html = '';
+    families.forEach(family => {
+        html += `
+            <div class="list-item" data-id="${family.id}" onclick="viewFamilyDetail('${family.id}')">
+                <h3>${family.name}</h3>
+                <p>创建者: ${family.creatorId === currentUser.id ? '我' : family.creatorId}</p>
+                <p>创建时间: ${family.createdAt}</p>
+                <p>${family.description || '暂无介绍'}</p>
+            </div>
+        `;
+    });
+    
+    allFamiliesList.innerHTML = html;
 }
 
 /**

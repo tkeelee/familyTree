@@ -62,6 +62,8 @@ public class PersonController extends BaseController {
      */
     private String addPerson(Request request, Response response) {
         try {
+            // 人员信息，有id则为更新，无则为添加
+            String id = getParam(request, "id");
             String name = getRequiredParam(request, "name");
             String gender = getRequiredParam(request, "gender");
             String generation = getRequiredParam(request, "generation");
@@ -73,8 +75,8 @@ public class PersonController extends BaseController {
             String treeId = getParam(request, "treeId");
             String familyId = getParam(request, "familyId");
             
-            Person person = personService.addPerson(name, gender, generation, birthDate, birthPlace, 
-                    deathDate, description, parentId, treeId, familyId);
+            Person person = personService.addPerson(id,name, gender, generation, birthDate, birthPlace, 
+                    deathDate, description, parentId, treeId, familyId,"");
             
             if (person == null) {
                 return error("添加人员失败");
@@ -95,7 +97,8 @@ public class PersonController extends BaseController {
      */
     private String addPersonWithSpouse(Request request, Response response) {
         try {
-            // 人员信息
+            // 人员信息，有id则为更新，无则为添加
+            String id = getParam(request, "id");
             String name = getRequiredParam(request, "name");
             String gender = getRequiredParam(request, "gender");
             String generation = getRequiredParam(request, "generation");
@@ -107,26 +110,30 @@ public class PersonController extends BaseController {
             String treeId = getParam(request, "treeId");
             String familyId = getParam(request, "familyId");
             
-            // 配偶信息
+            String spouseIdNew = "";
             String spouseName = getRequiredParam(request, "spouseName");
-            String spouseBirthDate = getParam(request, "spouseBirthDate");
-            String spouseBirthPlace = getParam(request, "spouseBirthPlace");
-            String spouseDeathDate = getParam(request, "spouseDeathDate");
-            String spouseDescription = getParam(request, "spouseDescription");
-            
+            // 配偶信息，有spouseId则为更新，无且spouseName不为空则为添加
+            if(spouseName.length()>0){
+                String spouseId = getParam(request, "spouseId");
+
+                String spouseBirthDate = getParam(request, "spouseBirthDate");
+                String spouseBirthPlace = getParam(request, "spouseBirthPlace");
+                String spouseDeathDate = getParam(request, "spouseDeathDate");
+                String spouseDescription = getParam(request, "spouseDescription");
+                
+                Spouse result = personService.addSpouse(spouseId,spouseName,spouseBirthDate,spouseBirthPlace,spouseDeathDate,spouseDescription);
+                // 获取配偶id
+                spouseIdNew = result.getId();
+            }
             // 创建人员对象
-            Person person = new Person(name, gender, generation, birthDate, birthPlace, 
-                    deathDate, description, parentId, treeId, familyId);
+            Person person = personService.addPerson(id,name, gender, generation, birthDate, birthPlace, 
+                    deathDate, description, parentId, treeId, familyId,spouseIdNew);
             
-            // 添加人员及其配偶
-            Person result = personService.addPersonWithSpouse(person, spouseName, spouseBirthDate, 
-                    spouseBirthPlace, spouseDeathDate, spouseDescription);
-            
-            if (result == null) {
+            if (person == null) {
                 return error("添加人员及其配偶失败");
             }
             
-            return success(result);
+            return success(person);
         } catch (IllegalArgumentException e) {
             setStatus(response, 400);
             return error(e.getMessage());

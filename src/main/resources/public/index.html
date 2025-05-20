@@ -98,8 +98,19 @@
                 <div class="action-bar">
                     <button id="create-tree-btn">创建家谱</button>
                 </div>
-                <div id="trees-list" class="list-container">
-                    <!-- 家谱列表将通过JavaScript动态加载 -->
+                <div class="trees-container">
+                    <div class="trees-column">
+                        <h3>我的家谱</h3>
+                        <div id="my-trees-list" class="list-container">
+                            <!-- 我的家谱列表将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                    <div class="trees-column">
+                        <h3>所有家谱</h3>
+                        <div id="all-trees-list" class="list-container">
+                            <!-- 所有家谱列表将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -109,8 +120,19 @@
                 <div class="action-bar">
                     <button id="create-family-btn">创建家族</button>
                 </div>
-                <div id="families-list" class="list-container">
-                    <!-- 家族列表将通过JavaScript动态加载 -->
+                <div class="families-container">
+                    <div class="families-column">
+                        <h3>我的家族</h3>
+                        <div id="my-families-list" class="list-container">
+                            <!-- 我的家族列表将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                    <div class="families-column">
+                        <h3>所有家族</h3>
+                        <div id="all-families-list" class="list-container">
+                            <!-- 所有家族列表将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -216,6 +238,7 @@
             <section id="add-person-section" class="section" style="display: none;">
                 <h2>添加成员</h2>
                 <form id="add-person-form">
+                    <input type="hidden" id="person-id" name="id" value="">
                     <div class="form-group">
                         <label for="person-name">姓名</label>
                         <input type="text" id="person-name" name="name" required>
@@ -260,6 +283,7 @@
                     </div>
                     <div id="spouse-info" style="display: none;">
                         <div class="form-group">
+                            <input type="hidden" id="spouse-id" name="spouse-id" value="">
                             <label for="spouse-name">配偶姓名</label>
                             <input type="text" id="spouse-name" name="spouseName">
                         </div>
@@ -281,7 +305,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit">添加</button>
+                        <button type="submit">确定</button>
                         <button type="button" id="cancel-add-person">取消</button>
                     </div>
                 </form>

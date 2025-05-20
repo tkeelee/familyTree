@@ -22,10 +22,10 @@ public class Person {
         this.id = String.valueOf(System.currentTimeMillis());
     }
     
-    public Person(String name, String gender, String generation, String birthDate, 
+    public Person(String id,String name, String gender, String generation, String birthDate, 
                   String birthPlace, String deathDate, String description, 
-                  String parentId, String treeId, String familyId) {
-        this.id = String.valueOf(System.currentTimeMillis());
+                  String parentId, String treeId, String familyId,String spouseId) {
+        this.id = id.length()>0?id:String.valueOf(System.currentTimeMillis());
         this.name = name;
         this.gender = gender;
         this.generation = generation;
@@ -33,6 +33,7 @@ public class Person {
         this.birthPlace = birthPlace;
         this.deathDate = deathDate;
         this.description = description;
+        this.spouseId = spouseId;
         this.parentId = parentId;
         this.treeId = treeId;
         this.familyId = familyId;

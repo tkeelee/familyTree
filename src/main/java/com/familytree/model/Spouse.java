@@ -16,8 +16,8 @@ public class Spouse {
         this.id = String.valueOf(System.currentTimeMillis());
     }
     
-    public Spouse(String name, String birthDate, String birthPlace, String deathDate, String description) {
-        this.id = String.valueOf(System.currentTimeMillis());
+    public Spouse(String id ,String name, String birthDate, String birthPlace, String deathDate, String description) {
+        this.id = id.length()>0?id:String.valueOf(System.currentTimeMillis());
         this.name = name;
         this.birthDate = birthDate;
         this.birthPlace = birthPlace;

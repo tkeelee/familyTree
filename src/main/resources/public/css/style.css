@@ -135,6 +135,7 @@ main {
 .form-group select,
 .form-group textarea {
     width: 100%;
+    max-width: 600px;
     padding: 0.8rem;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -168,6 +169,52 @@ main {
 
 .form-group button[type="button"]:hover {
     background-color: #bbb;
+}
+
+/* 家谱大厅双栏布局 */
+.trees-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.trees-column {
+    flex: 0 0 48%;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.trees-column h3 {
+    color: #4a6572;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f9aa33;
+}
+
+/* 家族大厅双栏布局 */
+.families-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.families-column {
+    flex: 0 0 48%;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.families-column h3 {
+    color: #4a6572;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f9aa33;
 }
 
 /* 列表容器 */

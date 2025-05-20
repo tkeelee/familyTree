@@ -1,0 +1,19 @@
+# 编译输出
+target/
+
+# IDE文件
+.idea/
+.vscode/
+*.iml
+
+# 日志文件
+*.log
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
