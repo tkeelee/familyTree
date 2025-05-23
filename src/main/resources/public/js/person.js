@@ -83,19 +83,19 @@ function viewPersonDetail(personId){
                     }
                     // 在配偶信息加载完成后渲染表单
                     renderPersonToForm(person, spouse);
-                    loadFamilyPersonsForSelect();
+                    // 移除这里的loadFamilyPersonsForSelect调用，因为已经在renderPersonToForm中处理
                 })
                 .catch(error => {
                     console.error('加载配偶详情出错:', error);
                     showMessage('加载配偶详情出错');
                     // 即使出错也要渲染表单，但不包含配偶信息
                     renderPersonToForm(person, null);
-                    loadFamilyPersonsForSelect();
+                    // 移除这里的loadFamilyPersonsForSelect调用，因为已经在renderPersonToForm中处理
                 });
             } else {
                 // 没有配偶ID，直接渲染表单
                 renderPersonToForm(person, null);
-                loadFamilyPersonsForSelect();
+                // 移除这里的loadFamilyPersonsForSelect调用，因为已经在renderPersonToForm中处理
             }
         } else {    
             showMessage(data.message || '加载家族详情失败');
@@ -468,7 +468,18 @@ function renderPersonToForm(person,spouse) {
     // 加载家谱辈分选项
     if (person.treeId) {
         currentTreeId = person.treeId;
-        loadGenerationOptions(person.treeId);
+        loadGenerationOptions(person.treeId, function() {
+            // 在辈分选项加载完成后设置辈分值
+            document.getElementById('person-generation').value = person.generation || '';
+            
+            // 先根据辈分加载父节点列表
+            updateParentSelectByGeneration(person.generation, null, function() {
+                // 在父节点列表加载完成后，设置为原始父节点值
+                setTimeout(() => {
+                    document.getElementById('person-parent-id').value = originalParentId;
+                }, 100);
+            });
+        });
     } else if (currentFamilyId) {
         // 如果没有treeId，尝试从家族获取treeId
         fetch(`/api/families/${currentFamilyId}`)
@@ -476,7 +487,18 @@ function renderPersonToForm(person,spouse) {
         .then(data => {
             if (data.success && data.data.treeId) {
                 currentTreeId = data.data.treeId;
-                loadGenerationOptions(data.data.treeId);
+                loadGenerationOptions(data.data.treeId, function() {
+                    // 在辈分选项加载完成后设置辈分值
+                    document.getElementById('person-generation').value = person.generation || '';
+                    
+                    // 先根据辈分加载父节点列表
+                    updateParentSelectByGeneration(person.generation, null, function() {
+                        // 在父节点列表加载完成后，设置为原始父节点值
+                        setTimeout(() => {
+                            document.getElementById('person-parent-id').value = originalParentId;
+                        }, 100);
+                    });
+                });
             }
         })
         .catch(error => {
@@ -484,19 +506,11 @@ function renderPersonToForm(person,spouse) {
         });
     }
     
-    // 设置辈分值（在加载选项后设置）
-    setTimeout(() => {
-        document.getElementById('person-generation').value = person.generation || '';
-        // 设置父节点值为原始值，而不是根据辈分更新
-        document.getElementById('person-parent-id').value = originalParentId|| '';
-    }, 500);
-    
     document.getElementById('person-birth-date').value = person.birthDate || '';
     document.getElementById('person-birth-place').value = person.birthPlace || '';
 
     document.getElementById('person-death-date').value = person.deathDate || '';
     document.getElementById('person-description').value = person.description || '';
-    document.getElementById('person-parent-id').value = originalParentId|| '';
     
     // 处理配偶信息
     if(spouse){
