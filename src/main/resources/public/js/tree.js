@@ -45,7 +45,8 @@ function renderMyFamilyTrees(trees) {
                 <h3>${tree.name}</h3>
                 <p>创建者: 我</p>
                 <p>创建时间: ${tree.createdAt}</p>
-                <p>${tree.description || '暂无介绍'}</p>
+                <p>家谱介绍：${tree.description || '暂无介绍'}</p>
+                <p>辈分信息：${tree.generation || '暂无介绍'}</p>
             </div>
         `;
     });
@@ -72,7 +73,8 @@ function renderAllFamilyTrees(trees) {
                 <h3>${tree.name}</h3>
                 <p>创建者: ${tree.creatorId === currentUser.id ? '我' : tree.creatorId}</p>
                 <p>创建时间: ${tree.createdAt}</p>
-                <p>${tree.description || '暂无介绍'}</p>
+                <p>家谱介绍：${tree.description || '暂无介绍'}</p>
+                <p>辈分信息：${tree.generation || '暂无介绍'}</p>
             </div>
         `;
     });
@@ -97,6 +99,7 @@ function viewTreeDetail(treeId) {
             document.getElementById('tree-detail-info').innerHTML = `
                 <p><strong>创建时间:</strong> ${tree.createdAt}</p>
                 <p><strong>介绍:</strong> ${tree.description || '暂无介绍'}</p>
+                <p><strong>辈分:</strong> ${tree.generation || '暂无辈分信息'}</p>
             `;
             
             // 加载家谱下的家族
@@ -175,6 +178,10 @@ function createFamilyTree(name, description) {
     formData.append('creatorId', currentUser.id);
     if (description) {
         formData.append('description', description);
+    }
+    const generation = document.getElementById('tree-generation').value;
+    if (generation) {
+        formData.append('generation', generation);
     }
     
     // 发送创建家谱请求

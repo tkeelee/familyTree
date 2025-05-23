@@ -8,6 +8,7 @@ public class FamilyTree {
     private String creatorId;   // 创建人ID
     private String createdAt;   // 创建时间
     private String description; // 家谱介绍
+    private String generation;   //家谱辈分
     
     SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -16,12 +17,13 @@ public class FamilyTree {
         this.createdAt = dateformat.format(System.currentTimeMillis());
     }
     
-    public FamilyTree(String name, String creatorId, String description) {
+    public FamilyTree(String name, String creatorId, String description,String generation) {
         this.id = String.valueOf(System.currentTimeMillis());
         this.name = name;
         this.creatorId = creatorId;
         this.createdAt = dateformat.format(System.currentTimeMillis());
         this.description = description;
+        this.generation = generation;
     }
     
     // Getters and Setters
@@ -64,14 +66,22 @@ public class FamilyTree {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getGeneration() {
+        return generation;
+    }
+
+    public void setGeneration(String generation) {
+        this.generation = generation;
+    }
     
     @Override
     public String toString() {
-        return id + "," + name + "," + creatorId + "," + createdAt + "," + description;
+        return id + "," + name + "," + creatorId + "," + createdAt + "," + description  + "," + generation;
     }
     
     public static FamilyTree fromString(String str) {
-        String[] parts = str.split(",", 5); // 限制分割次数，因为描述中可能包含逗号
+        String[] parts = str.split(",", 6); // 限制分割次数，因为描述中可能包含逗号
         FamilyTree tree = new FamilyTree();
         tree.setId(parts[0]);
         tree.setName(parts[1]);
@@ -79,6 +89,9 @@ public class FamilyTree {
         tree.setCreatedAt(parts[3]);
         if (parts.length > 4) {
             tree.setDescription(parts[4]);
+        }
+        if (parts.length > 5) {
+            tree.setGeneration(parts[5]);
         }
         return tree;
     }

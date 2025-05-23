@@ -22,8 +22,8 @@ public class FamilyTreeService {
      * @param description 家谱介绍
      * @return 创建的家谱对象
      */
-    public FamilyTree createFamilyTree(String name, String creatorId, String description) {
-        FamilyTree familyTree = new FamilyTree(name, creatorId, description);
+    public FamilyTree createFamilyTree(String name, String creatorId, String description,String generation) {
+        FamilyTree familyTree = new FamilyTree(name, creatorId, description,generation);
         if (familyTreeDao.save(familyTree)) {
             return familyTree;
         }

@@ -2,6 +2,9 @@
  * 家谱应用前端JavaScript - 成员管理相关功能
  */
 
+// 全局缓存变量
+let treeGenerationCache = {};
+
 /**
  * 加载家族成员
  * @param {string} familyId 家族ID
@@ -105,10 +108,14 @@ function viewPersonDetail(personId){
 }
 
 /**
- * 加载家族成员作为父节点选择
+ * 加载家族成员选择列表
+ * @param {Function} callback 加载完成后的回调函数
  */
-function loadFamilyPersonsForSelect() {
-    if (!currentFamilyId) return;
+function loadFamilyPersonsForSelect(callback) {
+    if (!currentFamilyId) {
+        if (callback) callback();
+        return;
+    }
     
     fetch(`/api/families/${currentFamilyId}/persons`)
     .then(response => response.json())
@@ -118,16 +125,167 @@ function loadFamilyPersonsForSelect() {
             // 保留第一个选项（无父节点）
             parentSelect.innerHTML = '<option value="">无（作为根节点）</option>';
             
-            data.data.forEach(person => {
-                const option = document.createElement('option');
-                option.value = person.id;
-                option.textContent = `${person.name} (${person.gender}, ${person.generation})`;
-                parentSelect.appendChild(option);
-            });
+            // 获取当前选择的辈分
+            const currentGeneration = document.getElementById('person-generation').value;
+            
+            // 如果有辈分选择，则根据辈分筛选父节点
+            if (currentGeneration) {
+                updateParentSelectByGeneration(currentGeneration, data.data);
+            } else {
+                // 否则显示所有成员
+                data.data.forEach(person => {
+                    const option = document.createElement('option');
+                    option.value = person.id;
+                    option.textContent = `${person.name} (${person.gender}, ${person.generation})`;
+                    parentSelect.appendChild(option);
+                });
+            }
         }
+        if (callback) callback();
     })
     .catch(error => {
         console.error('加载家族成员选择出错:', error);
+        if (callback) callback();
+    });
+}
+
+/**
+ * 根据辈分更新父节点选择
+ * @param {string} generation 当前选择的辈分
+ * @param {Array} persons 家族成员数据
+ * @param {Function} callback 更新完成后的回调函数
+ */
+function updateParentSelectByGeneration(generation, persons, callback) {
+    if (!currentFamilyId) {
+        if (callback) callback();
+        return;
+    }
+    
+    // 如果没有提供成员数据，则需要重新加载
+    if (!persons) {
+        fetch(`/api/families/${currentFamilyId}/persons`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateParentSelectWithData(generation, data.data, callback);
+            } else if (callback) {
+                callback();
+            }
+        })
+        .catch(error => {
+            console.error('加载家族成员出错:', error);
+            if (callback) callback();
+        });
+    } else {
+        updateParentSelectWithData(generation, persons, callback);
+    }
+}
+
+/**
+ * 使用成员数据更新父节点选择
+ * @param {string} generation 当前选择的辈分
+ * @param {Array} persons 家族成员数据
+ * @param {Function} callback 更新完成后的回调函数
+ */
+function updateParentSelectWithData(generation, persons, callback) {
+    // 检查缓存中是否有家谱数据
+    if (treeGenerationCache[currentTreeId]) {
+        processGenerationData(treeGenerationCache[currentTreeId], generation, persons);
+        if (callback) callback();
+        return;
+    }
+    
+    // 获取家谱辈分信息
+    fetch(`/api/trees/${currentTreeId}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data.generation) {
+            // 缓存家谱数据
+            treeGenerationCache[currentTreeId] = data.data.generation;
+            processGenerationData(data.data.generation, generation, persons);
+        }
+        if (callback) callback();
+    })
+    .catch(error => {
+        console.error('加载家谱辈分信息出错:', error);
+        if (callback) callback();
+    });
+}
+
+/**
+ * 处理辈分数据并更新UI
+ * @param {string} generationData 家谱辈分数据
+ * @param {string} currentGeneration 当前选择的辈分
+ * @param {Array} persons 家族成员数据
+ */
+function processGenerationData(generationData, currentGeneration, persons) {
+    const generations = generationData.split(':').filter(gen => gen.trim() !== '');
+    const currentIndex = generations.findIndex(gen => gen.trim() === currentGeneration);
+    
+    const parentSelect = document.getElementById('person-parent-id');
+    // 保留第一个选项（无父节点）
+    parentSelect.innerHTML = '<option value="">无（作为根节点）</option>';
+    
+    if (currentIndex > 0) {
+        // 如果不是顶级辈分，则显示上一级辈分的男性成员
+        const parentGeneration = generations[currentIndex - 1].trim();
+        
+        // 筛选上一级辈分的男性成员
+        const parentCandidates = persons.filter(person => 
+            person.generation === parentGeneration && person.gender === '男'
+        );
+        
+        parentCandidates.forEach(person => {
+            const option = document.createElement('option');
+            option.value = person.id;
+            option.textContent = `${person.name} (${person.gender}, ${person.generation})`;
+            parentSelect.appendChild(option);
+        });
+    }
+    // 如果是顶级辈分，则不需要添加选项，保持默认的"无（作为根节点）"
+}
+
+/**
+ * 加载家谱辈分选项
+ * @param {string} treeId 家谱ID
+ * @param {Function} callback 加载完成后的回调函数
+ */
+function loadGenerationOptions(treeId, callback) {
+    if (!treeId) {
+        if (callback) callback();
+        return;
+    }
+    
+    fetch(`/api/trees/${treeId}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data.generation) {
+            const generationSelect = document.getElementById('person-generation');
+            generationSelect.innerHTML = '';
+            
+            // 将辈分字符串按行分割成数组
+            const generations = data.data.generation.split(':').filter(gen => gen.trim() !== '');
+            
+            generations.forEach(gen => {
+                const option = document.createElement('option');
+                option.value = gen.trim();
+                option.textContent = gen.trim();
+                generationSelect.appendChild(option);
+            });
+            
+            // 添加辈分选择变更事件监听
+            document.getElementById('person-generation').addEventListener('change', function() {
+                const selectedGeneration = this.value;
+                if (selectedGeneration) {
+                    updateParentSelectByGeneration(selectedGeneration);
+                }
+            });
+        }
+        if (callback) callback();
+    })
+    .catch(error => {
+        console.error('加载家谱辈分选项出错:', error);
+        if (callback) callback();
     });
 }
 
@@ -141,7 +299,7 @@ function addPerson() {
         showMessage('参数错误');
         return;
     }
-    
+
     // 获取表单数据
     const id = document.getElementById('person-id').value;
     const name = document.getElementById('person-name').value;
@@ -300,15 +458,45 @@ function renderPersonToForm(person,spouse) {
     // 修改标题为'修改成员'
     document.querySelector('#add-person-section h2').innerText = '修改成员';
 
+    // 保存原始父节点值，以便后续恢复
+    const originalParentId = person.parentId || '';
+
     document.getElementById('person-id').value = person.id || '';
     document.getElementById('person-name').value = person.name || '';
     document.getElementById('person-gender').value = person.gender || '男';
-    document.getElementById('person-generation').value = person.generation || '';
+    
+    // 加载家谱辈分选项
+    if (person.treeId) {
+        currentTreeId = person.treeId;
+        loadGenerationOptions(person.treeId);
+    } else if (currentFamilyId) {
+        // 如果没有treeId，尝试从家族获取treeId
+        fetch(`/api/families/${currentFamilyId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data.treeId) {
+                currentTreeId = data.data.treeId;
+                loadGenerationOptions(data.data.treeId);
+            }
+        })
+        .catch(error => {
+            console.error('获取家族所属家谱出错:', error);
+        });
+    }
+    
+    // 设置辈分值（在加载选项后设置）
+    setTimeout(() => {
+        document.getElementById('person-generation').value = person.generation || '';
+        // 设置父节点值为原始值，而不是根据辈分更新
+        document.getElementById('person-parent-id').value = originalParentId|| '';
+    }, 500);
+    
     document.getElementById('person-birth-date').value = person.birthDate || '';
     document.getElementById('person-birth-place').value = person.birthPlace || '';
+
     document.getElementById('person-death-date').value = person.deathDate || '';
     document.getElementById('person-description').value = person.description || '';
-    document.getElementById('person-parent-id').value = person.parentId || '';
+    document.getElementById('person-parent-id').value = originalParentId|| '';
     
     // 处理配偶信息
     if(spouse){

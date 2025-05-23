@@ -112,8 +112,23 @@ function initNavEvents() {
     
     // 添加成员按钮
     document.getElementById('add-person-btn').addEventListener('click', function() {
-        loadFamilyPersonsForSelect();
+        // 显示加载指示器或禁用按钮
+        const btn = this;
+        btn.disabled = true;
         showSection('add-person-section');
+        
+        // 使用Promise.all并行加载数据
+        Promise.all([
+            new Promise(resolve => {
+                loadFamilyPersonsForSelect(resolve);
+            }),
+            new Promise(resolve => {
+                loadGenerationOptions(currentTreeId, resolve);
+            })
+        ]).finally(() => {
+            // 恢复按钮状态
+            btn.disabled = false;
+        });
     });
     
     // 取消添加成员

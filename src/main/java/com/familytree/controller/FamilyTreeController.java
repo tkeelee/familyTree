@@ -49,8 +49,9 @@ public class FamilyTreeController extends BaseController {
             String name = getRequiredParam(request, "name");
             String creatorId = getRequiredParam(request, "creatorId");
             String description = getParam(request, "description");
+            String generation = getParam(request, "generation");
             
-            FamilyTree familyTree = familyTreeService.createFamilyTree(name, creatorId, description);
+            FamilyTree familyTree = familyTreeService.createFamilyTree(name, creatorId, description,generation);
             if (familyTree == null) {
                 return error("创建家谱失败");
             }
@@ -120,6 +121,7 @@ public class FamilyTreeController extends BaseController {
             String treeId = getPathParam(request, "treeId");
             String name = getParam(request, "name");
             String description = getParam(request, "description");
+            String generation = getParam(request, "generation");
             
             FamilyTree tree = familyTreeService.getFamilyTreeById(treeId);
             if (tree == null) {
@@ -133,6 +135,10 @@ public class FamilyTreeController extends BaseController {
             
             if (description != null) {
                 tree.setDescription(description);
+            }
+
+            if (generation!= null) {
+                tree.setGeneration(generation);
             }
             
             boolean updated = familyTreeService.updateFamilyTree(tree);

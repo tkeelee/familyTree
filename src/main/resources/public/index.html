@@ -203,6 +203,10 @@
                         <textarea id="tree-description" name="description" rows="4"></textarea>
                     </div>
                     <div class="form-group">
+                        <label for="tree-generation">辈分信息</label>
+                        <textarea id="tree-generation" name="generation" rows="4" placeholder="请输入辈分信息，按辈分顺序排列，冒号分隔"></textarea>
+                    </div>
+                    <div class="form-group">
                         <button type="submit">创建</button>
                         <button type="button" id="cancel-create-tree">取消</button>
                     </div>
@@ -252,7 +256,9 @@
                     </div>
                     <div class="form-group">
                         <label for="person-generation">辈分</label>
-                        <input type="text" id="person-generation" name="generation" required>
+                        <select id="person-generation" name="generation" required>
+                            <!-- 辈分选项将通过JavaScript动态加载 -->
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="person-parent-id">父节点</label>
@@ -322,10 +328,10 @@
     <!-- 添加新的JS文件引用 -->
     <script src="js/app.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/ui.js"></script>
     <script src="js/tree.js"></script>
     <script src="js/family.js"></script>
     <script src="js/person.js"></script>
+    <script src="js/ui.js"></script>
     <script src="js/treeView.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.4/dagre-d3.min.js"></script>
