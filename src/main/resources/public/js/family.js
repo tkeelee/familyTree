@@ -44,7 +44,7 @@ function renderMyFamilies(families) {
                 <h3>${family.name}</h3>
                 <p>创建者: ${family.creatorId === currentUser.id ? '我' : family.creatorId}</p>
                 <p>创建时间: ${family.createdAt}</p>
-                <p>${family.description || '暂无介绍'}</p>
+                <p>家族介绍：${family.description || '暂无介绍'}</p>
             </div>
         `;
     });
@@ -71,7 +71,7 @@ function renderAllFamilies(families) {
                 <h3>${family.name}</h3>
                 <p>创建者: ${family.creatorId === currentUser.id ? '我' : family.creatorId}</p>
                 <p>创建时间: ${family.createdAt}</p>
-                <p>${family.description || '暂无介绍'}</p>
+                <p>家族介绍：${family.description || '暂无介绍'}</p>
             </div>
         `;
     });
@@ -97,6 +97,8 @@ function viewFamilyDetail(familyId) {
                 <p><strong>创建时间:</strong> ${family.createdAt}</p>
                 <p><strong>介绍:</strong> ${family.description || '暂无介绍'}</p>
             `;
+
+            currentTreeId = family.treeId;
             
             // 加载家族成员
             loadFamilyPersons(familyId);
