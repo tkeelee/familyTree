@@ -103,6 +103,11 @@ function initNavEvents() {
     document.getElementById('back-to-families-btn').addEventListener('click', function() {
         showSection('families-section');
     });
+
+    // 切换布局
+    document.getElementById('family-tree-goggle').addEventListener('click', function() {
+        toggleLayout();
+    });
     
     // 添加家族到家谱
     document.getElementById('add-family-to-tree-btn').addEventListener('click', function() {

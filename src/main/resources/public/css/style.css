@@ -388,3 +388,16 @@ footer {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
+
+/* 优化节点样式以适应不同布局 */
+.node-style {
+    fill: #fff;
+    stroke: #555;
+    stroke-width: 1.5px;
+}
+
+.edge-style {
+    stroke: #555;
+    stroke-width: 1.5px;
+    fill: none;
+}
